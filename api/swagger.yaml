@@ -11,7 +11,7 @@ basePath: /security/v1
 schemes:
   - https
 paths:
-  /role:
+  /roles:
     get:
       tags:
         - role
@@ -38,7 +38,7 @@ paths:
         '404':
           description: Role not found
   
-  '/role/{id}':
+  '/roles/{id}':
     get:
       tags:
         - role
@@ -88,7 +88,8 @@ paths:
           description: Invalid id supplied
         '404':
           description: User not found
-  '/role/{id}/assignable':
+          
+  '/roles/{id}/assignable_roles':
     get:
       tags:
         - role
@@ -115,7 +116,7 @@ paths:
         '404':
           description: Role not found
     
-  /user:
+  /users:
     get:
       tags:
         - user
@@ -172,7 +173,7 @@ paths:
       responses:
         default:
           description: successful operation
-  '/user/{uuid}':
+  '/users/{uuid}':
     get:
       tags:
         - user
@@ -244,7 +245,61 @@ paths:
         '404':
           description: User not found
 
-  '/user/{uuid}/roles/':
+  '/users/{uuid}/roles/':
+    delete:
+      tags:
+        - user_role
+      summary: Remove roles from user
+      description: Delete an array of roles from user
+      operationId: deleteRoleUser
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - in: path
+          name: uuid
+          description: uuid of the user
+          required: true
+          type: string 
+        - in: body
+          name: body
+          description: Array of roles
+          required: true
+          schema:
+            type: array
+            items: 
+              $ref: '#/definitions/Role'    
+      responses:
+        default:
+          description: successful operation
+
+    post:
+      tags:
+        - user_role
+      summary: Assign roles to user
+      description: Add an array of roles to the user (upsert)
+      operationId: updateRoleUser
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - in: path
+          name: uuid
+          description: uuid of the user
+          required: true
+          type: string 
+        - in: body
+          name: body
+          description: Array of roles
+          required: true
+          schema:
+            type: array
+            items: 
+              $ref: '#/definitions/Role'    
+      responses:
+        default:
+          description: successful operation
+        
     get:
       tags:
         - user_role
@@ -259,6 +314,7 @@ paths:
           description: get role applicable by application
           required: true
           type: integer
+
       responses:
         '200':
           description: successful operation
@@ -270,6 +326,33 @@ paths:
           description: Invalid role supplied
         '404':
           description: Role not found
+
+  '/users/{uuid}/assignable_roles/':
+    get:
+      tags:
+        - user_role
+      summary: retrieve assignable roles for user
+      operationId: getAssignableUserRoles
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - in: path
+          name: uuid
+          description: get roles that the user can assign
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Role'
+        '400':
+          description: Invalid user supplied
+        '404':
+          description: user not found
     put:
       tags:
         - user_role
@@ -319,7 +402,7 @@ paths:
         '404':
           description: User not found
           
-  '/user/{uuid}/account/':
+  '/users/{uuid}/accounts/':
     get:
       tags:
         - user_account
@@ -346,10 +429,10 @@ paths:
           description: Invalid uuid supplied
         '404':
           description: User not found
-    put:
+    post:
       tags:
         - user_account
-      summary: Updated user / account assignment
+      summary: Updated user / account assignment (upsert)
       description: This can only be done by the logged in user.
       operationId: updateUserAccounts
       produces:
@@ -405,7 +488,7 @@ paths:
           description: User not found
 
   
-  '/account/{id}':
+  '/accounts/{id}':
     get:
       tags:
         - account
@@ -431,7 +514,7 @@ paths:
         '404':
           description: User not found
 
-  /account:
+  /accounts:
     get:
       tags:
         - account
@@ -458,7 +541,7 @@ paths:
         '404':
           description: No accounts found
   
-  '/account/{id}/users':
+  '/accounts/{id}/users':
     get:
       tags:
         - account_user
@@ -474,6 +557,37 @@ paths:
           required: true
           type: string
 
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/User'
+        '400':
+          description: Invalid id supplied
+        '404':
+          description: Account not found
+  '/accounts/{id}/accounts':
+    get:
+      tags:
+        - account
+      summary: get accounts related to account (downstream)
+      operationId: getAccountsForAccountID
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          description: get accounts for account 
+          required: true
+          type: string
+        - in: query
+          name: shipto
+          description: get only shipto accounts 
+          required: false
+          type: boolean
       responses:
         '200':
           description: successful operation
