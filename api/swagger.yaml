@@ -1,483 +1,541 @@
----
-swagger: "2.0"
+swagger: '2.0'
 info:
-  description: "This is the description for the Valvoline Security API. This api allows\
-    \ for user management, role management, role to user assignment and account to\
-    \ user assigment"
-  version: "1.0.0"
-  title: "Valvoline Security API"
+  description: This is the description for the VLV Admin API. This api allows for user management, role management, role to user assignment and account to user assigment
+  version: 1.0.1
+  title: VLV Admin API
   contact:
-    email: "francisco.j.prata@accenture.com"
-  x-targetEndpoint: "https://dash.valvoline.com/security"
-host: "vvvdev.apimanagement.us2.hana.ondemand.com:443"
-basePath: "/security"
+    email: francisco.j.prata@accenture.com
+  x-targetEndpoint: 'https://www.vlv.com/security'
+host: 'localhost:443'
+basePath: /security/v1
 schemes:
-- "https"
+  - https
 paths:
   /role:
     get:
       tags:
-      - "role"
-      summary: "manage roles"
-      operationId: "getRoles"
+        - role
+      summary: manage roles
+      operationId: getRoles
       produces:
-      - "application/xml"
-      - "application/json"
+        - application/xml
+        - application/json
       parameters:
-      - name: "application"
-        in: "query"
-        description: "get role applicable by application"
-        required: false
-        type: "string"
+        - in: query
+          name: application
+          description: get role applicable by application
+          required: false
+          type: string        
       responses:
-        200:
-          description: "successful operation"
+        '200':
+          description: successful operation
           schema:
-            type: "array"
+            type: array
             items:
-              $ref: "#/definitions/Role"
-        400:
-          description: "Invalid role supplied"
-        404:
-          description: "Role not found"
-      x-swagger-router-controller: "Role"
-  /role/{id}:
+              $ref: '#/definitions/Role'
+        '400':
+          description: Invalid role supplied
+        '404':
+          description: Role not found
+  
+  '/role/{id}':
     get:
       tags:
-      - "role"
-      summary: "manage roles"
-      operationId: "getRolesbyID"
+        - role
+      summary: manage roles
+      operationId: getRolesbyID
       produces:
-      - "application/xml"
-      - "application/json"
+        - application/xml
+        - application/json
       parameters:
-      - name: "id"
-        in: "path"
-        description: "get role object by id"
-        required: true
-        type: "integer"
+        - in: path
+          name: id
+          description: get role object by id
+          required: true
+          type: integer        
       responses:
-        200:
-          description: "successful operation"
+        '200':
+          description: successful operation
           schema:
-            $ref: "#/definitions/Role"
-        400:
-          description: "Invalid role supplied"
-        404:
-          description: "Role not found"
-      x-swagger-router-controller: "Role"
+            $ref: '#/definitions/Role'
+        '400':
+          description: Invalid role supplied
+        '404':
+          description: Role not found
     put:
       tags:
-      - "role"
-      summary: "Updated role"
-      description: "Update role info."
-      operationId: "updateRole"
+        - role
+      summary: Updated role
+      description: Update role info.
+      operationId: updateRole
       produces:
-      - "application/xml"
-      - "application/json"
+        - application/xml
+        - application/json
       parameters:
-      - name: "id"
-        in: "path"
-        description: "id that need to be updated"
-        required: true
-        type: "integer"
-      - in: "body"
-        name: "body"
-        description: "Updated role object"
-        required: true
-        schema:
-          $ref: "#/definitions/Role"
+        - name: id
+          in: path
+          description: id that need to be updated
+          required: true
+          type: integer
+        - in: body
+          name: body
+          description: Updated role object
+          required: true
+          schema:
+            $ref: '#/definitions/Role'
       responses:
-        400:
-          description: "Invalid id supplied"
-        404:
-          description: "User not found"
-      x-swagger-router-controller: "Role"
+        '400':
+          description: Invalid id supplied
+        '404':
+          description: User not found
+  '/role/{id}/assignable':
+    get:
+      tags:
+        - role
+      summary: if role has specific 'assign role' permisson, returns the list of roles he can assign
+      operationId: getAssignableRoles
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          description: get roles assignable by role
+          required: true
+          type: string        
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Role'
+        '400':
+          description: Invalid id supplied
+        '404':
+          description: Role not found
+    
   /user:
     get:
       tags:
-      - "user"
-      summary: "get user info"
-      description: "get user by query"
-      operationId: "getUserByQuery"
+        - user
+      summary: get user info
+      description: get user by query
+      operationId: getUserByQuery
       produces:
-      - "application/xml"
-      - "application/json"
+        - application/xml
+        - application/json
       parameters:
-      - name: "name"
-        in: "query"
-        description: "get user object by user name"
-        required: false
-        type: "string"
-      - name: "email"
-        in: "query"
-        description: "get user object by email"
-        required: false
-        type: "string"
+        - in: query
+          name: name
+          description: get user object by user name
+          required: false
+          type: string
+        - in: query
+          name: email
+          description: get user object by email
+          required: false
+          type: string
+        - in: query
+          name: reference date
+          description: get users changed since date
+          required: false
+          type: string
+          
       responses:
-        200:
-          description: "successful operation"
+        '200':
+          description: successful operation
           schema:
-            type: "array"
+            type: array
             items:
-              $ref: "#/definitions/User"
-        400:
-          description: "Invalid uuid supplied"
-        404:
-          description: "User not found"
-      x-swagger-router-controller: "User"
+              $ref: '#/definitions/User'
+        '400':
+          description: Invalid uuid supplied
+        '404':
+          description: User not found
     post:
       tags:
-      - "user"
-      summary: "Create user"
-      description: "Create a new user in the security API"
-      operationId: "createUser"
+        - user
+      summary: Create user
+      description: Create a new user in the security API
+      operationId: createUser
       produces:
-      - "application/xml"
-      - "application/json"
+        - application/xml
+        - application/json
       parameters:
-      - in: "body"
-        name: "body"
-        description: "Created user object"
-        required: true
-        schema:
-          $ref: "#/definitions/User"
+        - in: body
+          name: body
+          description: Created user object
+          required: true
+          schema:
+            $ref: '#/definitions/User'    
       responses:
         default:
-          description: "successful operation"
-      x-swagger-router-controller: "User"
-  /user/{uuid}:
+          description: successful operation
+  '/user/{uuid}':
     get:
       tags:
-      - "user"
-      summary: "Get user by user uuid"
-      description: ""
-      operationId: "getUserByUUID"
+        - user
+      summary: Get user by user uuid
+      description: ''
+      operationId: getUserByUUID
       produces:
-      - "application/xml"
-      - "application/json"
+        - application/xml
+        - application/json
       parameters:
-      - name: "uuid"
-        in: "path"
-        description: "The uuid that needs to be fetched. Use user1 for testing. "
-        required: true
-        type: "string"
+        - name: uuid
+          in: path
+          description: 'The uuid that needs to be fetched. Use user1 for testing. '
+          required: true
+          type: string
       responses:
-        200:
-          description: "successful operation"
+        '200':
+          description: successful operation
           schema:
-            $ref: "#/definitions/User"
-        400:
-          description: "Invalid uuid supplied"
-        404:
-          description: "User not found"
-      x-swagger-router-controller: "User"
+            $ref: '#/definitions/User'
+        '400':
+          description: Invalid uuid supplied
+        '404':
+          description: User not found
     put:
       tags:
-      - "user"
-      summary: "Updated user"
-      description: "This can only be done by the logged in user."
-      operationId: "updateUser"
+        - user
+      summary: Updated user
+      description: This can only be done by the logged in user.
+      operationId: updateUser
       produces:
-      - "application/xml"
-      - "application/json"
+        - application/xml
+        - application/json
       parameters:
-      - name: "uuid"
-        in: "path"
-        description: "uuid that need to be updated"
-        required: true
-        type: "string"
-      - in: "body"
-        name: "body"
-        description: "Updated user object"
-        required: true
-        schema:
-          $ref: "#/definitions/User"
+        - name: uuid
+          in: path
+          description: uuid that need to be updated
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Updated user object
+          required: true
+          schema:
+            $ref: '#/definitions/User'
       responses:
-        400:
-          description: "Invalid uuid supplied"
-        404:
-          description: "User not found"
-      x-swagger-router-controller: "User"
+        '400':
+          description: Invalid uuid supplied
+        '404':
+          description: User not found
     delete:
       tags:
-      - "user"
-      summary: "Delete user"
-      description: "This can only be done by the logged in user."
-      operationId: "deleteUser"
+        - user
+      summary: Delete user
+      description: This can only be done by the logged in user.
+      operationId: deleteUser
       produces:
-      - "application/xml"
-      - "application/json"
+        - application/xml
+        - application/json
       parameters:
-      - name: "uuid"
-        in: "path"
-        description: "The name that needs to be deleted"
-        required: true
-        type: "string"
+        - name: uuid
+          in: path
+          description: The name that needs to be deleted
+          required: true
+          type: string
       responses:
-        400:
-          description: "Invalid uuid supplied"
-        404:
-          description: "User not found"
-      x-swagger-router-controller: "User"
-  /user/{uuid}/roles/:
+        '400':
+          description: Invalid uuid supplied
+        '404':
+          description: User not found
+
+  '/user/{uuid}/roles/':
     get:
       tags:
-      - "user_role"
-      summary: "manage user role assignments"
-      operationId: "getUserRoles"
+        - user_role
+      summary: manage user role assignments
+      operationId: getUserRoles
       produces:
-      - "application/xml"
-      - "application/json"
+        - application/xml
+        - application/json
       parameters:
-      - name: "uuid"
-        in: "path"
-        description: "get role applicable by application"
-        required: true
-        type: "integer"
+        - in: path
+          name: uuid
+          description: get role applicable by application
+          required: true
+          type: integer
       responses:
-        200:
-          description: "successful operation"
+        '200':
+          description: successful operation
           schema:
-            type: "array"
+            type: array
             items:
-              $ref: "#/definitions/Role"
-        400:
-          description: "Invalid role supplied"
-        404:
-          description: "Role not found"
-      x-swagger-router-controller: "User_role"
+              $ref: '#/definitions/Role'
+        '400':
+          description: Invalid role supplied
+        '404':
+          description: Role not found
     put:
       tags:
-      - "user_role"
-      summary: "Updated user role assigment"
-      description: "This can only be done by the logged in user."
-      operationId: "updateUserRole"
+        - user_role
+      summary: Updated user role assigment
+      description: This can only be done by the logged in user.
+      operationId: updateUserRole
       produces:
-      - "application/xml"
-      - "application/json"
+        - application/xml
+        - application/json
       parameters:
-      - name: "uuid"
-        in: "path"
-        description: "uuid that need to be updated"
-        required: true
-        type: "string"
-      - in: "body"
-        name: "body"
-        description: "Updated user object"
-        required: true
-        schema:
-          type: "array"
-          items:
-            $ref: "#/definitions/User"
+        - name: uuid
+          in: path
+          description: uuid that need to be updated
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Updated user object
+          required: true
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/User'
       responses:
-        400:
-          description: "Invalid uuid supplied"
-        404:
-          description: "User not found"
-      x-swagger-router-controller: "User_role"
+        '400':
+          description: Invalid uuid supplied
+        '404':
+          description: User not found
     delete:
       tags:
-      - "user_role"
-      summary: "Delete user role assignment"
-      description: "This can only be done by the logged in user."
-      operationId: "deleteUserRole"
+        - user_role
+      summary: Delete user role assignment
+      description: This can only be done by the logged in user.
+      operationId: deleteUserRole
       produces:
-      - "application/xml"
-      - "application/json"
+        - application/xml
+        - application/json
       parameters:
-      - name: "uuid"
-        in: "path"
-        description: "The name that needs to be deleted"
-        required: true
-        type: "string"
+        - name: uuid
+          in: path
+          description: The name that needs to be deleted
+          required: true
+          type: string
       responses:
-        400:
-          description: "Invalid uuid supplied"
-        404:
-          description: "User not found"
-      x-swagger-router-controller: "User_role"
-  /user/{uuid}/account/:
+        '400':
+          description: Invalid uuid supplied
+        '404':
+          description: User not found
+          
+  '/user/{uuid}/account/':
     get:
       tags:
-      - "user_account"
-      summary: "manage user account assignments"
-      operationId: "getUserAccounts"
+        - user_account
+      summary: manage user account assignments
+      operationId: getUserAccounts
       produces:
-      - "application/xml"
-      - "application/json"
+        - application/xml
+        - application/json
       parameters:
-      - name: "uuid"
-        in: "path"
-        description: "get accounts for user"
-        required: true
-        type: "integer"
+        - in: path
+          name: uuid
+          description: get accounts for user
+          required: true
+          type: integer      
+
       responses:
-        200:
-          description: "successful operation"
+        '200':
+          description: successful operation
           schema:
-            type: "array"
+            type: array
             items:
-              $ref: "#/definitions/Account"
-        400:
-          description: "Invalid uuid supplied"
-        404:
-          description: "User not found"
-      x-swagger-router-controller: "User_account"
+              $ref: '#/definitions/Account'
+        '400':
+          description: Invalid uuid supplied
+        '404':
+          description: User not found
     put:
       tags:
-      - "user_account"
-      summary: "Updated user / account assignment"
-      description: "This can only be done by the logged in user."
-      operationId: "updateUserAccounts"
+        - user_account
+      summary: Updated user / account assignment
+      description: This can only be done by the logged in user.
+      operationId: updateUserAccounts
       produces:
-      - "application/xml"
-      - "application/json"
+        - application/xml
+        - application/json
       parameters:
-      - name: "uuid"
-        in: "path"
-        description: "uuid that need to be updated"
-        required: true
-        type: "string"
-      - in: "body"
-        name: "body"
-        description: "Updated account object"
-        required: true
-        schema:
-          type: "array"
-          items:
-            $ref: "#/definitions/Account"
+        - name: uuid
+          in: path
+          description: uuid that need to be updated
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Updated account object
+          required: true
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Account'
       responses:
-        400:
-          description: "Invalid uuid supplied"
-        404:
-          description: "User not found"
-      x-swagger-router-controller: "User_account"
+        '400':
+          description: Invalid uuid supplied
+        '404':
+          description: User not found
     delete:
       tags:
-      - "user_account"
-      summary: "Delete user account assignment"
-      description: "This can only be done by the logged in user."
-      operationId: "deleteUserAccount"
+        - user_account
+      summary: Delete user account assignment
+      description: This can only be done by the logged in user.
+      operationId: deleteUserAccount
       produces:
-      - "application/xml"
-      - "application/json"
+        - application/xml
+        - application/json
       parameters:
-      - name: "uuid"
-        in: "path"
-        description: "The name that needs to be deleted"
-        required: true
-        type: "string"
-      - in: "body"
-        name: "body"
-        description: "Updated account object"
-        required: true
-        schema:
-          type: "array"
-          items:
-            $ref: "#/definitions/Account"
-      responses:
-        400:
-          description: "Invalid uuid supplied"
-        404:
-          description: "User not found"
-      x-swagger-router-controller: "User_account"
-  /account/{id}:
-    get:
-      tags:
-      - "account"
-      summary: "get account info by id"
-      operationId: "getAccountID"
-      produces:
-      - "application/xml"
-      - "application/json"
-      parameters:
-      - name: "id"
-        in: "path"
-        description: "get accounts"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "successful operation"
+        - name: uuid
+          in: path
+          description: The name that needs to be deleted
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Updated account object
+          required: true
           schema:
-            $ref: "#/definitions/Account"
-        400:
-          description: "Invalid id supplied"
-        404:
-          description: "User not found"
-      x-swagger-router-controller: "Account"
-  /account/{id}/users:
-    get:
-      tags:
-      - "account_user"
-      summary: "get users from account"
-      operationId: "getUserForAccountID"
-      produces:
-      - "application/xml"
-      - "application/json"
-      parameters:
-      - name: "id"
-        in: "path"
-        description: "get user for account"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            type: "array"
+            type: array
             items:
-              $ref: "#/definitions/User"
-        400:
-          description: "Invalid id supplied"
-        404:
-          description: "Account not found"
-      x-swagger-router-controller: "Account_user"
+              $ref: '#/definitions/Account'
+
+      responses:
+        '400':
+          description: Invalid uuid supplied
+        '404':
+          description: User not found
+
+  
+  '/account/{id}':
+    get:
+      tags:
+        - account
+      summary: get account info by id
+      operationId: getAccountID
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          description: get accounts 
+          required: true
+          type: string
+
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Account'
+        '400':
+          description: Invalid id supplied
+        '404':
+          description: User not found
+
+  /account:
+    get:
+      tags:
+        - account
+      summary:  get accounts that where changed since ..
+      operationId: getAccountUpdates
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - in: query
+          name: referencedate
+          description: get accounts with lasthierarchydate changed since referencedate 
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Account'
+        '400':
+          description: Invalid date supplied. Format (mm/dd/yyyy)
+        '404':
+          description: No accounts found
+  
+  '/account/{id}/users':
+    get:
+      tags:
+        - account_user
+      summary: get users from account 
+      operationId: getUserForAccountID
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          description: get user for account 
+          required: true
+          type: string
+
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/User'
+        '400':
+          description: Invalid id supplied
+        '404':
+          description: Account not found
+
+        
 definitions:
   User:
-    type: "object"
+    type: object
     properties:
       uuid:
-        type: "string"
+        type: string
       username:
-        type: "string"
+        type: string
       firstName:
-        type: "string"
+        type: string
       lastName:
-        type: "string"
+        type: string
       email:
-        type: "string"
+        type: string
       phone:
-        type: "string"
-      manager:
-        type: "string"
+        type: string
+      manager_uuid:
+        type: string
       userStatus:
-        type: "integer"
-        format: "int32"
-        description: "User Status"
+        type: integer
+        format: int32
+        description: User Status
+
+
   Role:
-    type: "object"
+    type: object
     properties:
       id:
-        type: "integer"
+        type: integer
       rolename:
-        type: "string"
+        type: string
+        
   Account:
-    type: "object"
+    type: object
     properties:
       id:
-        type: "string"
+        type: string
       salesorg:
-        type: "string"
+        type: string
       distchannel:
-        type: "string"
+        type: string
       division:
-        type: "string"
+        type: string
       accoountnumber:
-        type: "string"
+        type: string
       accounttype:
-        type: "string"
+        type: string
+        
+          
 externalDocs:
-  description: "Find out more about Valvoline"
-  url: "http://www.valvoline.com"
+  description: Find out more about VLV
+  url: 'http://www.vlv.com'
