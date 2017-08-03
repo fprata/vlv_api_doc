@@ -12,6 +12,26 @@ schemes:
   - https
 paths:
   /roles:
+    post:
+      tags:
+        - role
+      summary: Create role
+      description: Create a new role in the security API
+      operationId: createRole
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Created role object
+          required: true
+          schema:
+            $ref: '#/definitions/Role'    
+      responses:
+        default:
+          description: successful operation
+
     get:
       tags:
         - role
@@ -103,7 +123,7 @@ paths:
           name: id
           description: get roles assignable by role
           required: true
-          type: string        
+          type: integer     
       responses:
         '200':
           description: successful operation
@@ -115,7 +135,63 @@ paths:
           description: Invalid id supplied
         '404':
           description: Role not found
-    
+    post: 
+      tags:
+        - role
+      summary: Add assignable role
+      description: Create a new role in the security API
+      operationId: createAssignableRoles
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          description: Created assignable role object
+          required: true
+          type: integer
+        - in: body
+          name: body
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Role'    
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Role'
+
+        default:
+          description: successful operation
+          
+    delete: 
+      tags:
+        - role
+      summary: remove assignable role
+      description: remove role association from the security API
+      operationId: deleteAssignableRoles
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          description: deleted role object
+          required: true
+          type: integer
+        - in: body
+          name: body
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Role'    
+      responses:
+        default:
+          description: successful operation
+
   /users:
     get:
       tags:
@@ -171,6 +247,11 @@ paths:
           schema:
             $ref: '#/definitions/User'    
       responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/User'
+      
         default:
           description: successful operation
   '/users/{uuid}':
@@ -297,6 +378,10 @@ paths:
             items: 
               $ref: '#/definitions/Role'    
       responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Role'
         default:
           description: successful operation
         
@@ -377,6 +462,10 @@ paths:
             items:
               $ref: '#/definitions/User'
       responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Role'
         '400':
           description: Invalid uuid supplied
         '404':
@@ -453,6 +542,10 @@ paths:
             items:
               $ref: '#/definitions/Account'
       responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Account'
         '400':
           description: Invalid uuid supplied
         '404':
@@ -462,7 +555,7 @@ paths:
         - user_account
       summary: Delete user account assignment
       description: This can only be done by the logged in user.
-      operationId: deleteUserAccount
+      operationId: deleteUserAccounts
       produces:
         - application/xml
         - application/json
@@ -568,6 +661,35 @@ paths:
           description: Invalid id supplied
         '404':
           description: Account not found
+    post:
+      tags:
+        - user_account
+      summary: Updated user / account assignment (upsert)
+      description: This can only be done by the logged in user.
+      operationId: updateAccountsUser
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: uuid that need to be updated
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Updated account object
+          required: true
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Account'
+      responses:
+        '400':
+          description: Invalid uuid supplied
+        '404':
+          description: User not found
+    
   '/accounts/{id}/accounts':
     get:
       tags:
@@ -619,19 +741,21 @@ definitions:
         type: string
       manager_uuid:
         type: string
-      userStatus:
+      status:
         type: integer
-        format: int32
-        description: User Status
-
+      
 
   Role:
     type: object
     properties:
       id:
         type: integer
+      application:
+        type: string
       rolename:
         type: string
+      status:
+        type: integer
         
   Account:
     type: object
@@ -648,6 +772,8 @@ definitions:
         type: string
       accounttype:
         type: string
+      status:
+        type: integer
         
           
 externalDocs:
