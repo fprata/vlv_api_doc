@@ -1,7 +1,7 @@
 swagger: '2.0'
 info:
   description: This is the description for the VLV Admin API. This api allows for user management, role management, role to user assignment and account to user assigment
-  version: 1.0.1
+  version: 1.0.2
   title: VLV Admin API
   contact:
     email: francisco.j.prata@accenture.com
@@ -722,7 +722,96 @@ paths:
         '404':
           description: Account not found
 
+#################################################
+
+  '/roles/{id}/functions/':
+    delete:
+      tags:
+        - role_function
+      summary: Remove functions from roles
+      description: Delete an array of functions from role
+      operationId: deleteFunctionRole
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          description: id of the role
+          required: true
+          type: integer 
+        - in: body
+          name: body
+          description: Array of functions
+          required: true
+          schema:
+            type: array
+            items: 
+              $ref: '#/definitions/Function'    
+      responses:
+        default:
+          description: successful operation
+
+    post:
+      tags:
+        - role_function
+      summary: Assign functions to roles
+      description: Add an array of functions to the role (upsert)
+      operationId: updateFunctionRole
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          description: id of the role
+          required: true
+          type: integer 
+        - in: body
+          name: body
+          description: Array of roles
+          required: true
+          schema:
+            type: array
+            items: 
+              $ref: '#/definitions/Function'    
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Function'
+        default:
+          description: successful operation
         
+    get:
+      tags:
+        - role_function
+      summary: manage function role assignments
+      operationId: getRolesFunctions
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          description: get list of functions per role 
+          required: true
+          type: integer
+
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Function'
+        '400':
+          description: Invalid role supplied
+        '404':
+          description: Role not found
+
+
+#################################################
 definitions:
   User:
     type: object
@@ -739,6 +828,16 @@ definitions:
         type: string
       phone:
         type: string
+      mailingstreet:
+        type: string
+      mailingcity:
+        type: string
+      mailingstate:
+        type: string
+      mailingcountry:
+        type: string
+      admin:
+        type: boolean
       manager_uuid:
         type: string
       status:
@@ -750,9 +849,19 @@ definitions:
     properties:
       id:
         type: integer
-      application:
-        type: string
       rolename:
+        type: string
+      status:
+        type: integer
+
+  Function:
+    type: object
+    properties:
+      id:
+        type: integer
+      funcname:
+        type: string
+      application:
         type: string
       status:
         type: integer
@@ -772,6 +881,8 @@ definitions:
         type: string
       accounttype:
         type: string
+      master_account:
+        type: boolean
       status:
         type: integer
         
