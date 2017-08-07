@@ -227,7 +227,7 @@ paths:
             items:
               $ref: '#/definitions/User'
         '400':
-          description: Invalid uuid supplied
+          description: Invalid id supplied
         '404':
           description: User not found
     post:
@@ -254,20 +254,20 @@ paths:
       
         default:
           description: successful operation
-  '/users/{uuid}':
+  '/users/{id}':
     get:
       tags:
         - user
-      summary: Get user by user uuid
+      summary: Get user by user id
       description: ''
-      operationId: getUserByUUID
+      operationId: getUserByid
       produces:
         - application/xml
         - application/json
       parameters:
-        - name: uuid
+        - name: id
           in: path
-          description: 'The uuid that needs to be fetched. Use user1 for testing. '
+          description: 'The id that needs to be fetched. Use user1 for testing. '
           required: true
           type: string
       responses:
@@ -276,7 +276,7 @@ paths:
           schema:
             $ref: '#/definitions/User'
         '400':
-          description: Invalid uuid supplied
+          description: Invalid id supplied
         '404':
           description: User not found
     put:
@@ -289,9 +289,9 @@ paths:
         - application/xml
         - application/json
       parameters:
-        - name: uuid
+        - name: id
           in: path
-          description: uuid that need to be updated
+          description: id that need to be updated
           required: true
           type: string
         - in: body
@@ -302,7 +302,7 @@ paths:
             $ref: '#/definitions/User'
       responses:
         '400':
-          description: Invalid uuid supplied
+          description: Invalid id supplied
         '404':
           description: User not found
     delete:
@@ -315,18 +315,18 @@ paths:
         - application/xml
         - application/json
       parameters:
-        - name: uuid
+        - name: id
           in: path
           description: The name that needs to be deleted
           required: true
           type: string
       responses:
         '400':
-          description: Invalid uuid supplied
+          description: Invalid id supplied
         '404':
           description: User not found
 
-  '/users/{uuid}/roles/':
+  '/users/{id}/roles/':
     delete:
       tags:
         - user_role
@@ -338,8 +338,8 @@ paths:
         - application/json
       parameters:
         - in: path
-          name: uuid
-          description: uuid of the user
+          name: id
+          description: id of the user
           required: true
           type: string 
         - in: body
@@ -365,8 +365,8 @@ paths:
         - application/json
       parameters:
         - in: path
-          name: uuid
-          description: uuid of the user
+          name: id
+          description: id of the user
           required: true
           type: string 
         - in: body
@@ -395,7 +395,7 @@ paths:
         - application/json
       parameters:
         - in: path
-          name: uuid
+          name: id
           description: get role applicable by application
           required: true
           type: integer
@@ -412,7 +412,7 @@ paths:
         '404':
           description: Role not found
 
-  '/users/{uuid}/assignable_roles/':
+  '/users/{id}/assignable_roles/':
     get:
       tags:
         - user_role
@@ -423,7 +423,7 @@ paths:
         - application/json
       parameters:
         - in: path
-          name: uuid
+          name: id
           description: get roles that the user can assign
           required: true
           type: integer
@@ -448,9 +448,9 @@ paths:
         - application/xml
         - application/json
       parameters:
-        - name: uuid
+        - name: id
           in: path
-          description: uuid that need to be updated
+          description: id that need to be updated
           required: true
           type: string
         - in: body
@@ -467,7 +467,7 @@ paths:
           schema:
             $ref: '#/definitions/Role'
         '400':
-          description: Invalid uuid supplied
+          description: Invalid id supplied
         '404':
           description: User not found
     delete:
@@ -480,18 +480,18 @@ paths:
         - application/xml
         - application/json
       parameters:
-        - name: uuid
+        - name: id
           in: path
           description: The name that needs to be deleted
           required: true
           type: string
       responses:
         '400':
-          description: Invalid uuid supplied
+          description: Invalid id supplied
         '404':
           description: User not found
           
-  '/users/{uuid}/accounts/':
+  '/users/{id}/accounts/':
     get:
       tags:
         - user_account
@@ -502,7 +502,7 @@ paths:
         - application/json
       parameters:
         - in: path
-          name: uuid
+          name: id
           description: get accounts for user
           required: true
           type: integer      
@@ -515,7 +515,7 @@ paths:
             items:
               $ref: '#/definitions/Account'
         '400':
-          description: Invalid uuid supplied
+          description: Invalid id supplied
         '404':
           description: User not found
     post:
@@ -528,9 +528,9 @@ paths:
         - application/xml
         - application/json
       parameters:
-        - name: uuid
+        - name: id
           in: path
-          description: uuid that need to be updated
+          description: id that need to be updated
           required: true
           type: string
         - in: body
@@ -547,7 +547,7 @@ paths:
           schema:
             $ref: '#/definitions/Account'
         '400':
-          description: Invalid uuid supplied
+          description: Invalid id supplied
         '404':
           description: User not found
     delete:
@@ -560,7 +560,7 @@ paths:
         - application/xml
         - application/json
       parameters:
-        - name: uuid
+        - name: id
           in: path
           description: The name that needs to be deleted
           required: true
@@ -576,7 +576,7 @@ paths:
 
       responses:
         '400':
-          description: Invalid uuid supplied
+          description: Invalid id supplied
         '404':
           description: User not found
 
@@ -673,7 +673,7 @@ paths:
       parameters:
         - name: id
           in: path
-          description: uuid that need to be updated
+          description: id that need to be updated
           required: true
           type: string
         - in: body
@@ -686,7 +686,7 @@ paths:
               $ref: '#/definitions/Account'
       responses:
         '400':
-          description: Invalid uuid supplied
+          description: Invalid id supplied
         '404':
           description: User not found
     
@@ -816,7 +816,7 @@ definitions:
   User:
     type: object
     properties:
-      uuid:
+      id:
         type: string
       username:
         type: string
@@ -838,7 +838,7 @@ definitions:
         type: string
       admin:
         type: boolean
-      manager_uuid:
+      manager_id:
         type: string
       status:
         type: integer
