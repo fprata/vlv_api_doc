@@ -223,26 +223,6 @@ paths:
           description: Invalid id supplied
         '404':
           description: User not found
-    delete:
-      tags:
-        - user
-      summary: Delete user
-      description: This can only be done by the logged in user.
-      operationId: deleteUser
-      produces:
-        - application/xml
-        - application/json
-      parameters:
-        - name: id
-          in: path
-          description: The name that needs to be deleted
-          required: true
-          type: string
-      responses:
-        '400':
-          description: Invalid id supplied
-        '404':
-          description: User not found
 
   '/users/{id}/roles/':
     delete:
@@ -501,35 +481,7 @@ paths:
           description: Invalid id supplied
         '404':
           description: Account not found
-    post:
-      tags:
-        - user_account
-      summary: Updated user / account assignment (upsert)
-      description: This can only be done by the logged in user.
-      operationId: updateAccountsUser
-      produces:
-        - application/xml
-        - application/json
-      parameters:
-        - name: id
-          in: path
-          description: id that need to be updated
-          required: true
-          type: string
-        - in: body
-          name: body
-          description: Updated account object
-          required: true
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Account'
-      responses:
-        '400':
-          description: Invalid id supplied
-        '404':
-          description: User not found
-    
+          
   '/accounts/{id}/accounts':
     get:
       tags:
