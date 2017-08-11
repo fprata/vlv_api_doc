@@ -557,18 +557,7 @@ definitions:
       status:
         type: integer
 
-  Function:
-    type: object
-    properties:
-      id:
-        type: integer
-      funcname:
-        type: string
-      application:
-        type: string
-      status:
-        type: integer
-        
+
   Account:
     type: object
     properties:
