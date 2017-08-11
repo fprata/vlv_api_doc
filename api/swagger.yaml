@@ -883,6 +883,17 @@ definitions:
         type: string
       master_account:
         type: boolean
+      mailing_street:
+        type: string
+      mailing_city:
+        type: string
+      mailing_state:
+        type: string
+      mailing_postal_code:
+        type: string
+      mailing_country:
+        type: string
+
       status:
         type: integer
         
