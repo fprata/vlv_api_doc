@@ -871,27 +871,38 @@ definitions:
     properties:
       id:
         type: string
-      salesorg:
+      sales_org:
         type: string
-      distchannel:
+      dist_channel:
         type: string
       division:
         type: string
-      accoountnumber:
+      account_num:
         type: string
-      accounttype:
+      account_type:
         type: string
       master_account:
         type: boolean
-      mailing_street:
+      billing_street:
         type: string
-      mailing_city:
+      billing_city:
         type: string
-      mailing_state:
+      billing_state:
         type: string
-      mailing_postal_code:
+      billing_postal_code:
         type: string
-      mailing_country:
+      billing_country:
+        type: string
+
+      shipping_street:
+        type: string
+      shipping_city:
+        type: string
+      shipping_state:
+        type: string
+      shipping_postal_code:
+        type: string
+      shipping_country:
         type: string
 
       status:
